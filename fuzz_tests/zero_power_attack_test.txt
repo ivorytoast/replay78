@@ -1,0 +1,25 @@
+# Zero Power Attack Test
+# Tests that cells with 0 power cannot attack or move
+# Only power-ups (same-cell moves) should be allowed
+
+# Setup: Create a scenario with 0-power cells
+ttt|move|0 0 0 0
+ttt|move|0 1 0 1
+ttt|move|1 0 1 0
+ttt|move|1 1 1 1
+
+# Both players now have cells with power 1
+# X attacks O, creating a draw (both go to power 0)
+ttt|move|1 0 1 1
+
+# Now cell (1,0) has X with power 0, cell (1,1) has O with power 0
+# It's now O's turn. Try to attack with the 0-power O cell - should be REJECTED
+ttt|move|1 1 1 0
+
+# Try to move the 0-power O cell - should be REJECTED
+ttt|move|1 1 0 2
+
+# Power-up same cell should still work (costs power bank)
+ttt|move|1 1 1 1
+
+ttt|show|
