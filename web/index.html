@@ -250,6 +250,16 @@
             transform: translateY(-2px);
         }
 
+        .btn-endturn {
+            background: #9b59b6;
+            color: white;
+        }
+
+        .btn-endturn:hover {
+            background: #8e44ad;
+            transform: translateY(-2px);
+        }
+
         .status {
             text-align: center;
             padding: 15px;
@@ -346,6 +356,7 @@
         <div class="controls">
             <button class="btn-new" onclick="newGame()">New Game</button>
             <button class="btn-show" onclick="refreshBoard()">Refresh</button>
+            <button id="endTurnBtn" class="btn-endturn" onclick="endTurn()" style="display: none;">End Turn</button>
         </div>
 
         <div class="status" id="status">Click a cell to place your first piece</div>

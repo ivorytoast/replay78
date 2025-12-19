@@ -2,7 +2,9 @@ let ws;
 let gameState = {
     board: Array(3).fill(null).map(() => Array(3).fill({ player: 0, power: 0 })),
     currentPlayer: 1,
-    done: false
+    done: false,
+    currentPhase: 0,        // 0=Assignment, 1=Movement
+    movementTaken: false
 };
 let selectedCell = null;
 
@@ -47,7 +49,9 @@ function connect() {
                 player1PowerBank: data.player1PowerBank,
                 player2PowerBank: data.player2PowerBank,
                 player1Lines: data.player1Lines,
-                player2Lines: data.player2Lines
+                player2Lines: data.player2Lines,
+                currentPhase: data.currentPhase || 0,
+                movementTaken: data.movementTaken || false
             };
             renderBoard();
             updateGameInfo();
@@ -129,6 +133,10 @@ function handleCellClick(row, col) {
         return;
     }
 
+    const currentPhase = gameState.currentPhase;
+    const isAssignmentPhase = currentPhase === 0;
+    const isMovementPhase = currentPhase === 1;
+
     if (!selectedCell) {
         // First click - select source
         selectedCell = { row, col };
@@ -136,9 +144,20 @@ function handleCellClick(row, col) {
         const currentPlayerName = gameState.currentPlayer === 1 ? 'X' : 'O';
 
         if (player === 0) {
-            setStatus(`Selected empty cell (${row},${col}) - Click again to place ${currentPlayerName} or click another cell`);
+            if (isAssignmentPhase) {
+                setStatus(`Selected empty cell (${row},${col}) - Click again to place ${currentPlayerName}`);
+            } else {
+                setStatus(`Cannot place pieces during movement phase - select your piece to move`);
+                selectedCell = null;
+                renderBoard();
+                return;
+            }
         } else if (player === gameState.currentPlayer) {
-            setStatus(`Selected your piece at (${row},${col}) - Click where to move/attack/power-up`);
+            if (isAssignmentPhase) {
+                setStatus(`Selected your piece at (${row},${col}) - Click again to power up`);
+            } else {
+                setStatus(`Selected your piece at (${row},${col}) - Click where to move/attack/combine`);
+            }
         } else {
             setStatus(`That's opponent's piece! Click your own piece (${currentPlayerName})`);
             selectedCell = null;
@@ -153,12 +172,38 @@ function handleCellClick(row, col) {
         const toRow = row;
         const toCol = col;
 
-        // Client-side adjacency check for immediate feedback (different-cell operations only)
-        if (fromRow !== toRow || fromCol !== toCol) {
+        // Phase-specific validation
+        const isSameCell = (fromRow === toRow && fromCol === toCol);
+
+        if (isAssignmentPhase) {
+            // In assignment phase: only allow same-cell operations
+            if (!isSameCell) {
+                setStatus('During assignment phase, you can only place or power up pieces (click same cell)');
+                selectedCell = null;
+                renderBoard();
+                return;
+            }
+        } else if (isMovementPhase) {
+            // In movement phase: only allow different-cell operations
+            if (isSameCell) {
+                setStatus('During movement phase, you cannot place or power up (click different cell)');
+                selectedCell = null;
+                renderBoard();
+                return;
+            }
+
+            // Check if already made movement action
+            if (gameState.movementTaken) {
+                setStatus('You have already made your movement action this turn - click "End Turn"');
+                selectedCell = null;
+                renderBoard();
+                return;
+            }
+
+            // Validate adjacency for movement phase
             const selectedPlayer = gameState.board[fromRow][fromCol].player;
             const selectedPower = gameState.board[fromRow][fromCol].power;
 
-            // Only enforce adjacency for pieces with power (moves/attacks)
             if (selectedPlayer === gameState.currentPlayer && selectedPower > 0) {
                 if (!isAdjacent(fromRow, fromCol, toRow, toCol)) {
                     setStatus('Invalid move: Can only move to adjacent cells (up/down/left/right)');
@@ -194,6 +239,17 @@ function refreshBoard() {
     ws.send(JSON.stringify({ type: 'show' }));
 }
 
+function endTurn() {
+    if (gameState.currentPhase !== 1) {
+        setStatus('Cannot end turn - must complete assignment phase first');
+        return;
+    }
+
+    ws.send(JSON.stringify({ type: 'endturn' }));
+    selectedCell = null;
+    setStatus('Ending turn...');
+}
+
 function updateGameInfo() {
     const currentPlayerEl = document.getElementById('currentPlayer');
     const playerName = gameState.currentPlayer === 1 ? 'X' : 'O';
@@ -204,7 +260,9 @@ function updateGameInfo() {
     if (gameState.done) {
         gameStatusEl.textContent = 'Game Over!';
     } else {
-        gameStatusEl.textContent = 'In Progress';
+        // Display current phase
+        const phaseText = gameState.currentPhase === 0 ? 'Assignment' : 'Movement';
+        gameStatusEl.textContent = `Phase: ${phaseText}`;
     }
 
     // Update power banks display
@@ -239,11 +297,30 @@ function updateGameInfo() {
             player2LineBonusEl.classList.remove('visible');
         }
     }
+
+    // Update end turn button visibility
+    const endTurnBtn = document.getElementById('endTurnBtn');
+    if (endTurnBtn) {
+        if (gameState.currentPhase === 1 && !gameState.movementTaken && !gameState.done) {
+            endTurnBtn.style.display = 'inline-block';
+        } else {
+            endTurnBtn.style.display = 'none';
+        }
+    }
 }
 
 function setStatus(message) {
     const statusEl = document.getElementById('status');
-    statusEl.textContent = message;
+
+    // Add phase context to status messages
+    if (!gameState.done) {
+        const phasePrefix = gameState.currentPhase === 0
+            ? '[Assignment Phase] '
+            : '[Movement Phase] ';
+        statusEl.textContent = phasePrefix + message;
+    } else {
+        statusEl.textContent = message;
+    }
     statusEl.className = 'status';
     if (gameState.done) {
         statusEl.classList.add('game-over');

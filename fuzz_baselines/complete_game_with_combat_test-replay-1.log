@@ -1,0 +1,379 @@
+1|I|ttt|new|
+2|O|new game command processed
+3|O|.........
+4|O|Player 1 (X) Power Bank: 1
+5|O|Player 2 (O) Power Bank: 1
+6|O|Current Turn: Player 1
+7|O|Current Phase: Assignment
+8|I|ttt|move|0 0 0 0
+9|O|Placed piece at (0,0) (bank: 0) [Assignment complete - you may now move/attack/combine, or end turn]
+10|O|X........
+11|O|Player 1 (X) Power Bank: 0
+12|O|Player 2 (O) Power Bank: 1
+13|O|Current Turn: Player 1
+14|O|Current Phase: Movement (optional)
+15|I|ttt|endturn|
+16|O|Turn ended
+17|O|X........
+18|O|Player 1 (X) Power Bank: 0
+19|O|Player 2 (O) Power Bank: 1
+20|O|Current Turn: Player 2
+21|O|Current Phase: Assignment
+22|I|ttt|move|0 1 0 1
+23|O|Placed piece at (0,1) (bank: 0) [Assignment complete - you may now move/attack/combine, or end turn]
+24|O|XO.......
+25|O|Player 1 (X) Power Bank: 0
+26|O|Player 2 (O) Power Bank: 0
+27|O|Current Turn: Player 2
+28|O|Current Phase: Movement (optional)
+29|I|ttt|endturn|
+30|O|Turn ended
+31|O|XO.......
+32|O|Player 1 (X) Power Bank: 1
+33|O|Player 2 (O) Power Bank: 0
+34|O|Current Turn: Player 1
+35|O|Current Phase: Assignment
+36|I|ttt|move|1 0 1 0
+37|O|Placed piece at (1,0) (bank: 0) [Assignment complete - you may now move/attack/combine, or end turn]
+38|O|XO.X.....
+39|O|Player 1 (X) Power Bank: 0
+40|O|Player 2 (O) Power Bank: 0
+41|O|Current Turn: Player 1
+42|O|Current Phase: Movement (optional)
+43|I|ttt|endturn|
+44|O|Turn ended
+45|O|XO.X.....
+46|O|Player 1 (X) Power Bank: 0
+47|O|Player 2 (O) Power Bank: 1
+48|O|Current Turn: Player 2
+49|O|Current Phase: Assignment
+50|I|ttt|move|1 1 1 1
+51|O|Placed piece at (1,1) (bank: 0) [Assignment complete - you may now move/attack/combine, or end turn]
+52|O|XO.XO....
+53|O|Player 1 (X) Power Bank: 0
+54|O|Player 2 (O) Power Bank: 0
+55|O|Current Turn: Player 2
+56|O|Current Phase: Movement (optional)
+57|I|ttt|endturn|
+58|O|Turn ended
+59|O|XO.XO....
+60|O|Player 1 (X) Power Bank: 1
+61|O|Player 2 (O) Power Bank: 0
+62|O|Current Turn: Player 1
+63|O|Current Phase: Assignment
+64|I|ttt|move|2 0 2 0
+65|O|Placed piece at (2,0) (bank: 0) [Assignment complete - you may now move/attack/combine, or end turn]
+66|O|XO.XO.X..
+67|O|Player 1 (X) Power Bank: 0
+68|O|Player 2 (O) Power Bank: 0
+69|O|Current Turn: Player 1
+70|O|Current Phase: Movement (optional)
+71|I|ttt|endturn|
+72|O|Turn ended
+73|O|XO.XO.X..
+74|O|Player 1 (X) Power Bank: 0
+75|O|Player 2 (O) Power Bank: 1
+76|O|Current Turn: Player 2
+77|O|Current Phase: Assignment
+78|I|ttt|move|2 1 2 1
+79|O|Placed piece at (2,1) (bank: 0) [Assignment complete - you may now move/attack/combine, or end turn]
+80|O|XO.XO.XO.
+81|O|Player 1 (X) Power Bank: 0
+82|O|Player 2 (O) Power Bank: 0
+83|O|Current Turn: Player 2
+84|O|Current Phase: Movement (optional)
+85|I|ttt|endturn|
+86|O|Turn ended
+87|O|XO.XO.XO.
+88|O|Player 1 (X) Power Bank: 2
+89|O|Player 2 (O) Power Bank: 0
+90|O|Current Turn: Player 1
+91|O|Current Phase: Assignment
+92|I|ttt|move|0 0 0 0
+93|O|Power up: (0,0) now has power 2 (bank: 1)
+94|O|X2O.XO.XO.
+95|O|Player 1 (X) Power Bank: 1
+96|O|Player 2 (O) Power Bank: 0
+97|O|Current Turn: Player 1
+98|O|Current Phase: Assignment
+99|I|ttt|move|0 0 0 0
+100|O|Power up: (0,0) now has power 3 (bank: 0) [Assignment complete - you may now move/attack/combine, or end turn]
+101|O|X3O.XO.XO.
+102|O|Player 1 (X) Power Bank: 0
+103|O|Player 2 (O) Power Bank: 0
+104|O|Current Turn: Player 1
+105|O|Current Phase: Movement (optional)
+106|I|ttt|endturn|
+107|O|Turn ended
+108|O|X3O.XO.XO.
+109|O|Player 1 (X) Power Bank: 0
+110|O|Player 2 (O) Power Bank: 2
+111|O|Current Turn: Player 2
+112|O|Current Phase: Assignment
+113|I|ttt|move|0 2 0 2
+114|O|Placed piece at (0,2) (bank: 1)
+115|O|X3OOXO.XO.
+116|O|Player 1 (X) Power Bank: 0
+117|O|Player 2 (O) Power Bank: 1
+118|O|Current Turn: Player 2
+119|O|Current Phase: Assignment
+120|I|ttt|move|1 2 1 2
+121|O|Placed piece at (1,2) (bank: 0) [Assignment complete - you may now move/attack/combine, or end turn]
+122|O|X3OOXOOXO.
+123|O|Player 1 (X) Power Bank: 0
+124|O|Player 2 (O) Power Bank: 0
+125|O|Current Turn: Player 2
+126|O|Current Phase: Movement (optional)
+127|I|ttt|endturn|
+128|O|Turn ended
+129|O|X3OOXOOXO.
+130|O|Player 1 (X) Power Bank: 2
+131|O|Player 2 (O) Power Bank: 0
+132|O|Current Turn: Player 1
+133|O|Current Phase: Assignment
+134|I|ttt|move|1 0 1 0
+135|O|Power up: (1,0) now has power 2 (bank: 1)
+136|O|X3OOX2OOXO.
+137|O|Player 1 (X) Power Bank: 1
+138|O|Player 2 (O) Power Bank: 0
+139|O|Current Turn: Player 1
+140|O|Current Phase: Assignment
+141|I|ttt|move|2 0 2 0
+142|O|Power up: (2,0) now has power 2 (bank: 0) [Assignment complete - you may now move/attack/combine, or end turn]
+143|O|X3OOX2OOX2O.
+144|O|Player 1 (X) Power Bank: 0
+145|O|Player 2 (O) Power Bank: 0
+146|O|Current Turn: Player 1
+147|O|Current Phase: Movement (optional)
+148|I|ttt|move|2 0 2 1
+149|O|Combat: (2,0) defeats (2,1) [2 vs 1] - Captured with power 1 [Opponent lost 1 line(s)!]
+150|O|X3OOX2OOX0X.
+151|O|Player 1 (X) Power Bank: 0
+152|O|Player 2 (O) Power Bank: 1
+153|O|Current Turn: Player 2
+154|O|Current Phase: Assignment
+155|I|ttt|show|
+156|O|show command processed
+157|O|X3OOX2OOX0X.
+158|O|Player 1 (X) Power Bank: 0
+159|O|Player 2 (O) Power Bank: 1
+160|O|Current Turn: Player 2
+161|O|Current Phase: Assignment
+162|I|ttt|move|1 1 1 1
+163|O|Power up: (1,1) now has power 2 (bank: 0) [Assignment complete - you may now move/attack/combine, or end turn]
+164|O|X3OOX2O2OX0X.
+165|O|Player 1 (X) Power Bank: 0
+166|O|Player 2 (O) Power Bank: 0
+167|O|Current Turn: Player 2
+168|O|Current Phase: Movement (optional)
+169|I|ttt|endturn|
+170|O|Turn ended
+171|O|X3OOX2O2OX0X.
+172|O|Player 1 (X) Power Bank: 2
+173|O|Player 2 (O) Power Bank: 0
+174|O|Current Turn: Player 1
+175|O|Current Phase: Assignment
+176|I|ttt|move|1 0 1 0
+177|O|Power up: (1,0) now has power 3 (bank: 1)
+178|O|X3OOX3O2OX0X.
+179|O|Player 1 (X) Power Bank: 1
+180|O|Player 2 (O) Power Bank: 0
+181|O|Current Turn: Player 1
+182|O|Current Phase: Assignment
+183|I|ttt|move|1 0 1 0
+184|O|Power up: (1,0) now has power 4 (bank: 0) [Assignment complete - you may now move/attack/combine, or end turn]
+185|O|X3OOX4O2OX0X.
+186|O|Player 1 (X) Power Bank: 0
+187|O|Player 2 (O) Power Bank: 0
+188|O|Current Turn: Player 1
+189|O|Current Phase: Movement (optional)
+190|I|ttt|move|1 0 1 1
+191|O|Combat: (1,0) defeats (1,1) [4 vs 2] - Captured with power 2
+192|O|X3OOX0X2OX0X.
+193|O|Player 1 (X) Power Bank: 0
+194|O|Player 2 (O) Power Bank: 1
+195|O|Current Turn: Player 2
+196|O|Current Phase: Assignment
+197|I|ttt|show|
+198|O|show command processed
+199|O|X3OOX0X2OX0X.
+200|O|Player 1 (X) Power Bank: 0
+201|O|Player 2 (O) Power Bank: 1
+202|O|Current Turn: Player 2
+203|O|Current Phase: Assignment
+204|I|ttt|move|0 1 0 1
+205|O|Power up: (0,1) now has power 2 (bank: 0) [Assignment complete - you may now move/attack/combine, or end turn]
+206|O|X3O2OX0X2OX0X.
+207|O|Player 1 (X) Power Bank: 0
+208|O|Player 2 (O) Power Bank: 0
+209|O|Current Turn: Player 2
+210|O|Current Phase: Movement (optional)
+211|I|ttt|endturn|
+212|O|Turn ended
+213|O|X3O2OX0X2OX0X.
+214|O|Player 1 (X) Power Bank: 2
+215|O|Player 2 (O) Power Bank: 0
+216|O|Current Turn: Player 1
+217|O|Current Phase: Assignment
+218|I|ttt|move|2 2 2 2
+219|O|Placed piece at (2,2) (bank: 1)
+220|O|X3O2OX0X2OX0XX
+221|O|Player 1 (X) Power Bank: 1
+222|O|Player 2 (O) Power Bank: 0
+223|O|Current Turn: Player 1
+224|O|Current Phase: Assignment
+225|I|ttt|move|2 2 2 2
+226|O|Power up: (2,2) now has power 2 (bank: 0) [Assignment complete - you may now move/attack/combine, or end turn]
+227|O|X3O2OX0X2OX0XX2
+228|O|Player 1 (X) Power Bank: 0
+229|O|Player 2 (O) Power Bank: 0
+230|O|Current Turn: Player 1
+231|O|Current Phase: Movement (optional)
+232|I|ttt|move|2 2 1 2
+233|O|Combat: (2,2) defeats (1,2) [2 vs 1] - Captured with power 1 [Formed 1 line(s)!]
+234|O|X3O2OX0X2XX0XX0
+235|O|Player 1 (X) Power Bank: 0
+236|O|Player 2 (O) Power Bank: 1
+237|O|Current Turn: Player 2
+238|O|Current Phase: Assignment
+239|I|ttt|show|
+240|O|show command processed
+241|O|X3O2OX0X2XX0XX0
+242|O|Player 1 (X) Power Bank: 0
+243|O|Player 2 (O) Power Bank: 1
+244|O|Current Turn: Player 2
+245|O|Current Phase: Assignment
+246|I|ttt|move|0 2 0 2
+247|O|Power up: (0,2) now has power 2 (bank: 0) [Assignment complete - you may now move/attack/combine, or end turn]
+248|O|X3O2O2X0X2XX0XX0
+249|O|Player 1 (X) Power Bank: 0
+250|O|Player 2 (O) Power Bank: 0
+251|O|Current Turn: Player 2
+252|O|Current Phase: Movement (optional)
+253|I|ttt|endturn|
+254|O|Turn ended
+255|O|X3O2O2X0X2XX0XX0
+256|O|Player 1 (X) Power Bank: 5
+257|O|Player 2 (O) Power Bank: 0
+258|O|Current Turn: Player 1
+259|O|Current Phase: Assignment
+260|I|ttt|move|0 0 0 0
+261|O|Power up: (0,0) now has power 4 (bank: 4)
+262|O|X4O2O2X0X2XX0XX0
+263|O|Player 1 (X) Power Bank: 4
+264|O|Player 2 (O) Power Bank: 0
+265|O|Current Turn: Player 1
+266|O|Current Phase: Assignment
+267|I|ttt|move|0 0 0 0
+268|O|Power up: (0,0) now has power 5 (bank: 3)
+269|O|X5O2O2X0X2XX0XX0
+270|O|Player 1 (X) Power Bank: 3
+271|O|Player 2 (O) Power Bank: 0
+272|O|Current Turn: Player 1
+273|O|Current Phase: Assignment
+274|I|ttt|move|0 0 0 0
+275|O|Power up: (0,0) now has power 6 (bank: 2)
+276|O|X6O2O2X0X2XX0XX0
+277|O|Player 1 (X) Power Bank: 2
+278|O|Player 2 (O) Power Bank: 0
+279|O|Current Turn: Player 1
+280|O|Current Phase: Assignment
+281|I|ttt|move|1 1 1 1
+282|O|Power up: (1,1) now has power 3 (bank: 1)
+283|O|X6O2O2X0X3XX0XX0
+284|O|Player 1 (X) Power Bank: 1
+285|O|Player 2 (O) Power Bank: 0
+286|O|Current Turn: Player 1
+287|O|Current Phase: Assignment
+288|I|ttt|move|1 1 1 1
+289|O|Power up: (1,1) now has power 4 (bank: 0) [Assignment complete - you may now move/attack/combine, or end turn]
+290|O|X6O2O2X0X4XX0XX0
+291|O|Player 1 (X) Power Bank: 0
+292|O|Player 2 (O) Power Bank: 0
+293|O|Current Turn: Player 1
+294|O|Current Phase: Movement (optional)
+295|I|ttt|move|1 1 0 1
+296|O|Combat: (1,1) defeats (0,1) [4 vs 2] - Captured with power 2 [Formed 1 line(s)!]
+297|O|X6X2O2X0X0XX0XX0
+298|O|Player 1 (X) Power Bank: 0
+299|O|Player 2 (O) Power Bank: 1
+300|O|Current Turn: Player 2
+301|O|Current Phase: Assignment
+302|I|ttt|show|
+303|O|show command processed
+304|O|X6X2O2X0X0XX0XX0
+305|O|Player 1 (X) Power Bank: 0
+306|O|Player 2 (O) Power Bank: 1
+307|O|Current Turn: Player 2
+308|O|Current Phase: Assignment
+309|I|ttt|move|0 2 0 2
+310|O|Power up: (0,2) now has power 3 (bank: 0) [Assignment complete - you may now move/attack/combine, or end turn]
+311|O|X6X2O3X0X0XX0XX0
+312|O|Player 1 (X) Power Bank: 0
+313|O|Player 2 (O) Power Bank: 0
+314|O|Current Turn: Player 2
+315|O|Current Phase: Movement (optional)
+316|I|ttt|endturn|
+317|O|Turn ended
+318|O|X6X2O3X0X0XX0XX0
+319|O|Player 1 (X) Power Bank: 6
+320|O|Player 2 (O) Power Bank: 0
+321|O|Current Turn: Player 1
+322|O|Current Phase: Assignment
+323|I|ttt|move|0 1 0 1
+324|O|Power up: (0,1) now has power 3 (bank: 5)
+325|O|X6X3O3X0X0XX0XX0
+326|O|Player 1 (X) Power Bank: 5
+327|O|Player 2 (O) Power Bank: 0
+328|O|Current Turn: Player 1
+329|O|Current Phase: Assignment
+330|I|ttt|move|0 1 0 1
+331|O|Power up: (0,1) now has power 4 (bank: 4)
+332|O|X6X4O3X0X0XX0XX0
+333|O|Player 1 (X) Power Bank: 4
+334|O|Player 2 (O) Power Bank: 0
+335|O|Current Turn: Player 1
+336|O|Current Phase: Assignment
+337|I|ttt|move|0 1 0 1
+338|O|Power up: (0,1) now has power 5 (bank: 3)
+339|O|X6X5O3X0X0XX0XX0
+340|O|Player 1 (X) Power Bank: 3
+341|O|Player 2 (O) Power Bank: 0
+342|O|Current Turn: Player 1
+343|O|Current Phase: Assignment
+344|I|ttt|move|0 1 0 1
+345|O|Power up: (0,1) now has power 6 (bank: 2)
+346|O|X6X6O3X0X0XX0XX0
+347|O|Player 1 (X) Power Bank: 2
+348|O|Player 2 (O) Power Bank: 0
+349|O|Current Turn: Player 1
+350|O|Current Phase: Assignment
+351|I|ttt|move|0 1 0 1
+352|O|Power up: (0,1) now has power 7 (bank: 1)
+353|O|X6X7O3X0X0XX0XX0
+354|O|Player 1 (X) Power Bank: 1
+355|O|Player 2 (O) Power Bank: 0
+356|O|Current Turn: Player 1
+357|O|Current Phase: Assignment
+358|I|ttt|move|0 1 0 1
+359|O|Power up: (0,1) now has power 8 (bank: 0) [Assignment complete - you may now move/attack/combine, or end turn]
+360|O|X6X8O3X0X0XX0XX0
+361|O|Player 1 (X) Power Bank: 0
+362|O|Player 2 (O) Power Bank: 0
+363|O|Current Turn: Player 1
+364|O|Current Phase: Movement (optional)
+365|I|ttt|move|0 1 0 2
+366|O|Combat: (0,1) defeats (0,2) [8 vs 3] - Captured with power 5 [Formed 3 line(s)!]
+367|O|Game Over: Player 1 wins
+368|O|X6X0X5X0X0XX0XX0
+369|O|Player 1 (X) Power Bank: 0
+370|O|Player 2 (O) Power Bank: 0
+371|O|Current Turn: Player 1
+372|O|Current Phase: Movement (optional)
+373|I|ttt|show|
+374|O|show command processed
+375|O|X6X0X5X0X0XX0XX0
+376|O|Player 1 (X) Power Bank: 0
+377|O|Player 2 (O) Power Bank: 0
+378|O|Current Turn: Player 1
+379|O|Current Phase: Movement (optional)

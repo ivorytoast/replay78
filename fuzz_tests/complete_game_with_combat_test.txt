@@ -1,0 +1,95 @@
+# Complete game test demonstrating multi-action turn system and combat
+# This test verifies:
+# - Assignment phase with power bank management
+# - Movement phase with optional actions
+# - Combat leaving source cell at power 0
+# - Game ending when one player controls all 9 cells
+
+ttt|new|
+
+# Turn 1 - Player 1: Place at (0,0)
+ttt|move|0 0 0 0
+ttt|endturn|
+
+# Turn 2 - Player 2: Place at (0,1)
+ttt|move|0 1 0 1
+ttt|endturn|
+
+# Turn 3 - Player 1: Place at (1,0)
+ttt|move|1 0 1 0
+ttt|endturn|
+
+# Turn 4 - Player 2: Place at (1,1)
+ttt|move|1 1 1 1
+ttt|endturn|
+
+# Turn 5 - Player 1: Place at (2,0)
+ttt|move|2 0 2 0
+ttt|endturn|
+
+# Turn 6 - Player 2: Place at (2,1)
+ttt|move|2 1 2 1
+ttt|endturn|
+
+# Turn 7 - Player 1: Power up (0,0) twice (bank=2)
+ttt|move|0 0 0 0
+ttt|move|0 0 0 0
+ttt|endturn|
+
+# Turn 8 - Player 2: Place at (0,2) and (1,2) (bank=2)
+ttt|move|0 2 0 2
+ttt|move|1 2 1 2
+ttt|endturn|
+
+# Turn 9 - Player 1: Power up (1,0) and (2,0), then attack (2,1) (bank=2)
+ttt|move|1 0 1 0
+ttt|move|2 0 2 0
+ttt|move|2 0 2 1
+ttt|show|
+
+# Turn 10 - Player 2: Power up (1,1) (bank=1)
+ttt|move|1 1 1 1
+ttt|endturn|
+
+# Turn 11 - Player 1: Power up (1,0) twice, then attack (1,1) (bank=2)
+ttt|move|1 0 1 0
+ttt|move|1 0 1 0
+ttt|move|1 0 1 1
+ttt|show|
+
+# Turn 12 - Player 2: Power up (0,1) (bank=1)
+ttt|move|0 1 0 1
+ttt|endturn|
+
+# Turn 13 - Player 1: Place at (2,2), power it up, then attack (1,2) (bank=2)
+ttt|move|2 2 2 2
+ttt|move|2 2 2 2
+ttt|move|2 2 1 2
+ttt|show|
+
+# Turn 14 - Player 2: Power up (0,2) (bank=1)
+ttt|move|0 2 0 2
+ttt|endturn|
+
+# Turn 15 - Player 1: Power up (0,0) 3 times and (1,1) 2 times, then attack (0,1) (bank=5)
+ttt|move|0 0 0 0
+ttt|move|0 0 0 0
+ttt|move|0 0 0 0
+ttt|move|1 1 1 1
+ttt|move|1 1 1 1
+ttt|move|1 1 0 1
+ttt|show|
+
+# Turn 16 - Player 2: Power up (0,2) (bank=1)
+ttt|move|0 2 0 2
+ttt|endturn|
+
+# Turn 17 - Player 1: Power up (0,1) 6 times, then attack (0,2) for the win! (bank=6)
+ttt|move|0 1 0 1
+ttt|move|0 1 0 1
+ttt|move|0 1 0 1
+ttt|move|0 1 0 1
+ttt|move|0 1 0 1
+ttt|move|0 1 0 1
+ttt|move|0 1 0 2
+ttt|show|

@@ -83,6 +83,10 @@ func (gs *GameServer) handleMessage(conn *websocket.Conn, msg Message) {
 		// In a real implementation, we'd use channels or callbacks
 		time.Sleep(50 * time.Millisecond)
 		gs.sendBoardState(conn)
+	case "endturn":
+		gs.engine.In("ttt|endturn|")
+		time.Sleep(50 * time.Millisecond)
+		gs.sendBoardState(conn)
 	case "new":
 		gs.engine.In("ttt|new|")
 		time.Sleep(50 * time.Millisecond)
@@ -125,6 +129,8 @@ func (gs *GameServer) sendBoardState(conn *websocket.Conn) {
 		"player2PowerBank": state.GetPowerBank(2),
 		"player1Lines":     player1Lines,
 		"player2Lines":     player2Lines,
+		"currentPhase":     int(state.GetCurrentPhase()),
+		"movementTaken":    state.IsMovementActionTaken(),
 	}
 
 	data, _ := json.Marshal(response)

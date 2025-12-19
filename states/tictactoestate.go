@@ -5,6 +5,13 @@ type Cell struct {
 	Power  int
 }
 
+type TurnPhase int
+
+const (
+	PhaseAssignment TurnPhase = 0 // Must assign power bank points
+	PhaseMovement   TurnPhase = 1 // Optional movement action
+)
+
 type TicTacToeState struct {
 	Board                  [][]Cell
 	CurrentPlayer          int
@@ -13,6 +20,8 @@ type TicTacToeState struct {
 	Player2PowerBank       int
 	Player1FirstTurnDone   bool
 	Player2FirstTurnDone   bool
+	CurrentPhase           TurnPhase // Track which phase of turn
+	MovementActionTaken    bool      // Track if movement done this turn
 }
 
 func NewTicTacToeState() *TicTacToeState {
@@ -28,6 +37,8 @@ func NewTicTacToeState() *TicTacToeState {
 		Player2PowerBank:     1,
 		Player1FirstTurnDone: false,
 		Player2FirstTurnDone: false,
+		CurrentPhase:         PhaseAssignment,
+		MovementActionTaken:  false,
 	}
 }
 
@@ -103,4 +114,20 @@ func (tts *TicTacToeState) SetFirstTurnDone(player int) {
 	} else {
 		tts.Player2FirstTurnDone = true
 	}
+}
+
+func (tts *TicTacToeState) GetCurrentPhase() TurnPhase {
+	return tts.CurrentPhase
+}
+
+func (tts *TicTacToeState) SetCurrentPhase(phase TurnPhase) {
+	tts.CurrentPhase = phase
+}
+
+func (tts *TicTacToeState) IsMovementActionTaken() bool {
+	return tts.MovementActionTaken
+}
+
+func (tts *TicTacToeState) SetMovementActionTaken(taken bool) {
+	tts.MovementActionTaken = taken
 }

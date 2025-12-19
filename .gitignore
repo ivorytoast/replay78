@@ -1,3 +1,3 @@
-fuzz
 .idea/
 go.sum
+78-*.log

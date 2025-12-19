@@ -63,13 +63,67 @@ func (t *TicTacToeApp) OnEvent(event []string) {
 					t.engine.Out("Invalid move")
 				}
 			}
+		case "endturn":
+			if t.engine.TTT().IsDone() {
+				t.engine.Out("Turn end rejected - game ended")
+			} else {
+				state := t.engine.TTT()
+				// Only allow ending turn if in movement phase (assignment must be complete)
+				if state.GetCurrentPhase() == states.PhaseMovement {
+					t.endTurn()
+					t.engine.Out("Turn ended")
+					t.showBoard()
+				} else {
+					t.engine.Out("Must complete assignment phase first (power bank must be 0)")
+				}
+			}
 		}
 	}
 }
 
+// Action type classification
+type ActionType int
+
+const (
+	ActionPlace   ActionType = iota // Placing new piece (requires power bank)
+	ActionPowerUp                   // Powering up existing piece (requires power bank)
+	ActionMove                      // Moving piece to empty cell
+	ActionCombine                   // Combining two own pieces
+	ActionAttack                    // Attacking opponent
+)
+
+func (t *TicTacToeApp) classifyAction(fromRow, fromCol, toRow, toCol int, state *states.TicTacToeState) ActionType {
+	fromCell := state.GetBoard()[fromRow][fromCol]
+	toCell := state.GetBoard()[toRow][toCol]
+
+	// Same cell operations
+	if fromRow == toRow && fromCol == toCol {
+		if fromCell.Player == 0 {
+			return ActionPlace
+		}
+		return ActionPowerUp
+	}
+
+	// Different cell operations
+	if toCell.Player == 0 {
+		return ActionMove
+	} else if toCell.Player == state.GetCurrentPlayer() {
+		return ActionCombine
+	} else {
+		return ActionAttack
+	}
+}
+
+func (t *TicTacToeApp) isAssignmentAction(actionType ActionType) bool {
+	return actionType == ActionPlace || actionType == ActionPowerUp
+}
+
+func (t *TicTacToeApp) isMovementAction(actionType ActionType) bool {
+	return actionType == ActionMove || actionType == ActionCombine || actionType == ActionAttack
+}
+
 func (t *TicTacToeApp) makeMove(fromRow, fromCol, toRow, toCol int) string {
 	state := t.engine.TTT()
-	currentPlayer := state.GetCurrentPlayer()
 
 	// Check bounds
 	if fromRow < 0 || fromRow > 2 || fromCol < 0 || fromCol > 2 ||
@@ -77,16 +131,108 @@ func (t *TicTacToeApp) makeMove(fromRow, fromCol, toRow, toCol int) string {
 		return ""
 	}
 
+	// Classify the action
+	actionType := t.classifyAction(fromRow, fromCol, toRow, toCol, state)
+
+	// Phase-based validation
+	currentPhase := state.GetCurrentPhase()
+
+	if currentPhase == states.PhaseAssignment {
+		// In assignment phase: only allow assignment actions
+		if !t.isAssignmentAction(actionType) {
+			return "" // Reject movement actions during assignment phase
+		}
+		return t.executeAssignmentAction(fromRow, fromCol, toRow, toCol, actionType)
+	} else if currentPhase == states.PhaseMovement {
+		// In movement phase: only allow movement actions
+		if !t.isMovementAction(actionType) {
+			return "" // Reject assignment actions during movement phase
+		}
+
+		// Only allow one movement action per turn
+		if state.IsMovementActionTaken() {
+			return "" // Already made movement action this turn
+		}
+
+		return t.executeMovementAction(fromRow, fromCol, toRow, toCol, actionType)
+	}
+
+	return ""
+}
+
+func (t *TicTacToeApp) executeAssignmentAction(fromRow, fromCol, toRow, toCol int, actionType ActionType) string {
+	state := t.engine.TTT()
+	currentPlayer := state.GetCurrentPlayer()
+
 	assert.Is(state != nil)
 	assert.Is(state.GetBoard() != nil)
-	assert.Is(len(state.GetBoard()) > fromRow)
-	assert.Is(len(state.GetBoard()[fromRow]) > fromCol)
-	assert.Is(len(state.GetBoard()) > toRow)
-	assert.Is(len(state.GetBoard()[toRow]) > toCol)
+
+	board := state.GetBoard()
+	fromCell := board[fromRow][fromCol]
+
+	var result string
+
+	if actionType == ActionPlace {
+		// Check power bank before allowing placement
+		currentPowerBank := state.GetPowerBank(currentPlayer)
+		if currentPowerBank <= 0 {
+			return "" // Reject move
+		}
+		// Deduct from power bank
+		state.IncrementPowerBank(currentPlayer, -1)
+		// Place piece
+		state.SetCell(fromRow, fromCol, currentPlayer)
+		result = fmt.Sprintf("Placed piece at (%d,%d) (bank: %d)", fromRow, fromCol, state.GetPowerBank(currentPlayer))
+
+	} else if actionType == ActionPowerUp {
+		// Validate ownership
+		if fromCell.Player != currentPlayer {
+			return ""
+		}
+		// Check power bank before allowing power-up
+		currentPowerBank := state.GetPowerBank(currentPlayer)
+		if currentPowerBank <= 0 {
+			return "" // Reject move
+		}
+		// Deduct from power bank
+		state.IncrementPowerBank(currentPlayer, -1)
+		state.IncrementCellPower(fromRow, fromCol)
+		result = fmt.Sprintf("Power up: (%d,%d) now has power %d (bank: %d)",
+			fromRow, fromCol, fromCell.Power+1, state.GetPowerBank(currentPlayer))
+	}
+
+	// Check if assignment phase is complete (power bank empty)
+	if state.GetPowerBank(currentPlayer) == 0 {
+		// Transition to movement phase
+		state.SetCurrentPhase(states.PhaseMovement)
+		result += " [Assignment complete - you may now move/attack/combine, or end turn]"
+	}
+
+	return result
+}
+
+func (t *TicTacToeApp) executeMovementAction(fromRow, fromCol, toRow, toCol int, actionType ActionType) string {
+	state := t.engine.TTT()
+	currentPlayer := state.GetCurrentPlayer()
 
 	board := state.GetBoard()
 	fromCell := board[fromRow][fromCol]
 	toCell := board[toRow][toCol]
+
+	// Validate source cell is owned by current player
+	if fromCell.Player != currentPlayer {
+		return ""
+	}
+
+	// Validate source cell has power > 0
+	if fromCell.Power <= 0 {
+		return ""
+	}
+
+	// Validate adjacency for all movement actions
+	if !t.isAdjacent(fromRow, fromCol, toRow, toCol) {
+		return ""
+	}
 
 	// Count lines before move
 	player1LinesBefore := t.CountLines(1)
@@ -94,98 +240,54 @@ func (t *TicTacToeApp) makeMove(fromRow, fromCol, toRow, toCol int) string {
 
 	var result string
 
-	// Special case: placing/powering up at same location
-	if fromRow == toRow && fromCol == toCol {
-		if fromCell.Player == 0 {
-			// Check power bank before allowing placement
-			currentPowerBank := state.GetPowerBank(currentPlayer)
-			if currentPowerBank <= 0 {
+	if actionType == ActionMove {
+		// Moving to empty cell
+		state.SetCell(toRow, toCol, currentPlayer)
+		state.SetCellPower(toRow, toCol, fromCell.Power)
+		state.ClearCell(fromRow, fromCol)
+		result = fmt.Sprintf("Move: (%d,%d) -> (%d,%d)", fromRow, fromCol, toRow, toCol)
 
-				return "" // Reject move
-			}
-			// Deduct from power bank
-			state.IncrementPowerBank(currentPlayer, -1)
-			// Placing initial piece
-			state.SetCell(fromRow, fromCol, currentPlayer)
-			result = fmt.Sprintf("Placed piece at (%d,%d) (bank: %d)", fromRow, fromCol, state.GetPowerBank(currentPlayer))
-		} else if fromCell.Player == currentPlayer {
-			// Check power bank before allowing power-up
-			currentPowerBank := state.GetPowerBank(currentPlayer)
-			if currentPowerBank <= 0 {
-				return "" // Reject move
-			}
-			// Deduct from power bank
-			state.IncrementPowerBank(currentPlayer, -1)
-			state.IncrementCellPower(fromRow, fromCol)
-			result = fmt.Sprintf("Power up: (%d,%d) now has power %d (bank: %d)",
-				fromRow, fromCol, fromCell.Power+1, state.GetPowerBank(currentPlayer))
-		} else {
-			// Can't power up opponent's piece
-			return ""
-		}
-	} else {
-		// Validate source cell is owned by current player (for all non-same-cell moves)
-		if fromCell.Player != currentPlayer {
-			return ""
-		}
+	} else if actionType == ActionCombine {
+		// Combining two adjacent pieces
+		combinedPower := fromCell.Power + toCell.Power
+		state.SetCellPower(toRow, toCol, combinedPower)
+		state.ClearCell(fromRow, fromCol)
+		result = fmt.Sprintf("Combine: (%d,%d) + (%d,%d) -> power %d", fromRow, fromCol, toRow, toCol, combinedPower)
 
-		// Validate source cell has power > 0 for moves/attacks
-		if fromCell.Power <= 0 {
-			return ""
-		}
+	} else if actionType == ActionAttack {
+		// Combat with opponent
+		attackPower := fromCell.Power
+		defensePower := toCell.Power
 
-		// Validate adjacency for moves/attacks (different-cell operations only)
-		if !t.isAdjacent(fromRow, fromCol, toRow, toCol) {
-			return ""
-		}
-
-		if toCell.Player == 0 {
-			// Moving to empty cell
+		if attackPower > defensePower {
+			// Attacker wins
+			newPower := attackPower - defensePower
 			state.SetCell(toRow, toCol, currentPlayer)
-			state.SetCellPower(toRow, toCol, fromCell.Power)
-			state.ClearCell(fromRow, fromCol)
-			result = fmt.Sprintf("Move: (%d,%d) -> (%d,%d)", fromRow, fromCol, toRow, toCol)
-		} else if toCell.Player == currentPlayer {
-			// Combining two adjacent pieces of the same player
-			combinedPower := fromCell.Power + toCell.Power
-			state.SetCellPower(toRow, toCol, combinedPower)
-			state.ClearCell(fromRow, fromCol)
-			result = fmt.Sprintf("Combine: (%d,%d) + (%d,%d) -> power %d", fromRow, fromCol, toRow, toCol, combinedPower)
+			state.SetCellPower(toRow, toCol, newPower)
+			state.SetCellPower(fromRow, fromCol, 0)
+			result = fmt.Sprintf("Combat: (%d,%d) defeats (%d,%d) [%d vs %d] - Captured with power %d",
+				fromRow, fromCol, toRow, toCol, attackPower, defensePower, newPower)
+		} else if attackPower == defensePower {
+			// Draw
+			state.SetCellPower(fromRow, fromCol, 0)
+			state.SetCellPower(toRow, toCol, 0)
+			result = fmt.Sprintf("Combat: (%d,%d) draws with (%d,%d) [%d vs %d] - Both reduced to power 0",
+				fromRow, fromCol, toRow, toCol, attackPower, defensePower)
 		} else {
-			// Combat with opponent
-			attackPower := fromCell.Power
-			defensePower := toCell.Power
-
-			if attackPower > defensePower {
-				// Attacker wins
-				newPower := attackPower - defensePower
-				state.SetCell(toRow, toCol, currentPlayer)
-				state.SetCellPower(toRow, toCol, newPower)
-				state.ClearCell(fromRow, fromCol)
-				result = fmt.Sprintf("Combat: (%d,%d) defeats (%d,%d) [%d vs %d] - Captured with power %d",
-					fromRow, fromCol, toRow, toCol, attackPower, defensePower, newPower)
-			} else if attackPower == defensePower {
-				// Draw - both go to power 0 but keep positions
-				state.SetCellPower(fromRow, fromCol, 0)
-				state.SetCellPower(toRow, toCol, 0)
-				result = fmt.Sprintf("Combat: (%d,%d) draws with (%d,%d) [%d vs %d] - Both reduced to power 0",
-					fromRow, fromCol, toRow, toCol, attackPower, defensePower)
-			} else {
-				// Attacker loses
-				newDefensePower := defensePower - attackPower
-				state.ClearCell(fromRow, fromCol)
-				state.SetCellPower(toRow, toCol, newDefensePower)
-				result = fmt.Sprintf("Combat: (%d,%d) defeated by (%d,%d) [%d vs %d] - Attacker eliminated, defender at power %d",
-					fromRow, fromCol, toRow, toCol, attackPower, defensePower, newDefensePower)
-			}
+			// Attacker loses
+			newDefensePower := defensePower - attackPower
+			state.SetCellPower(fromRow, fromCol, 0)
+			state.SetCellPower(toRow, toCol, newDefensePower)
+			result = fmt.Sprintf("Combat: (%d,%d) defeated by (%d,%d) [%d vs %d] - Attacker eliminated, defender at power %d",
+				fromRow, fromCol, toRow, toCol, attackPower, defensePower, newDefensePower)
 		}
 	}
 
-	// Count lines after move (for display purposes only, no immediate bonus)
+	// Count lines after move
 	player1LinesAfter := t.CountLines(1)
 	player2LinesAfter := t.CountLines(2)
 
-	// Display line change messages (no power bank changes here)
+	// Display line change messages
 	if currentPlayer == 1 {
 		linesGained := player1LinesAfter - player1LinesBefore
 		linesLost := player2LinesBefore - player2LinesAfter
@@ -206,9 +308,23 @@ func (t *TicTacToeApp) makeMove(fromRow, fromCol, toRow, toCol int) string {
 		}
 	}
 
+	// Mark movement action as taken
+	state.SetMovementActionTaken(true)
+
+	// End turn automatically after movement action
+	t.endTurn()
+
+	return result
+}
+
+func (t *TicTacToeApp) endTurn() {
+	state := t.engine.TTT()
+	currentPlayer := state.GetCurrentPlayer()
+
 	// Check for game end
 	if t.checkWinner() {
 		state.SetDone(true)
+		return
 	}
 
 	// Mark current player's first turn as done
@@ -218,7 +334,7 @@ func (t *TicTacToeApp) makeMove(fromRow, fromCol, toRow, toCol int) string {
 	nextPlayer := 3 - currentPlayer
 	state.SetCurrentPlayer(nextPlayer)
 
-	// Only grant turn bonus to next player if BOTH players have completed their first turn
+	// Grant turn bonus to next player
 	bothPlayersHadFirstTurn := state.IsFirstTurnDone(1) && state.IsFirstTurnDone(2)
 	if bothPlayersHadFirstTurn {
 		// Base turn bonus: +1
@@ -228,7 +344,9 @@ func (t *TicTacToeApp) makeMove(fromRow, fromCol, toRow, toCol int) string {
 		state.IncrementPowerBank(nextPlayer, turnBonus)
 	}
 
-	return result
+	// Reset phase to assignment for next turn
+	state.SetCurrentPhase(states.PhaseAssignment)
+	state.SetMovementActionTaken(false)
 }
 
 func (t *TicTacToeApp) isAdjacent(fromRow, fromCol, toRow, toCol int) bool {
@@ -310,6 +428,9 @@ func (t *TicTacToeApp) reset() {
 	state.SetPowerBank(2, 1)
 	state.Player1FirstTurnDone = false
 	state.Player2FirstTurnDone = false
+	// Reset phase state
+	state.SetCurrentPhase(states.PhaseAssignment)
+	state.SetMovementActionTaken(false)
 }
 
 func (t *TicTacToeApp) showBoard() {
@@ -365,6 +486,14 @@ func (t *TicTacToeApp) showBoard() {
 	t.engine.Out(fmt.Sprintf("Player 1 (X) Power Bank: %d", t.engine.TTT().GetPowerBank(1)))
 	t.engine.Out(fmt.Sprintf("Player 2 (O) Power Bank: %d", t.engine.TTT().GetPowerBank(2)))
 	t.engine.Out(fmt.Sprintf("Current Turn: Player %d", t.engine.TTT().GetCurrentPlayer()))
+
+	// Add phase information
+	phase := t.engine.TTT().GetCurrentPhase()
+	phaseStr := "Assignment"
+	if phase == states.PhaseMovement {
+		phaseStr = "Movement (optional)"
+	}
+	t.engine.Out(fmt.Sprintf("Current Phase: %s", phaseStr))
 }
 
 func (t *TicTacToeApp) CountLines(player int) int {

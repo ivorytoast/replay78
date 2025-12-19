@@ -12,11 +12,6 @@ import (
 	"time"
 )
 
-/*
-What's Next:
-1. Allow the player to "use" as many power points they have in their bank for each turn
-2. Create a full regression test
-*/
 func main() {
 	regression := flag.Bool("regression", false, "Run regression tests")
 	flag.Parse()
