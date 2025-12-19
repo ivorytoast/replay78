@@ -1,0 +1,46 @@
+1|I|ttt|move|0 0 0 0
+2|O|Placed piece at (0,0) (bank: 0)
+3|O|X........
+4|O|Player 1 (X) Power Bank: 0
+5|O|Player 2 (O) Power Bank: 1
+6|O|Current Turn: Player 2
+7|I|ttt|move|0 1 0 1
+8|O|Placed piece at (0,1) (bank: 0)
+9|O|XO.......
+10|O|Player 1 (X) Power Bank: 1
+11|O|Player 2 (O) Power Bank: 0
+12|O|Current Turn: Player 1
+13|I|ttt|move|1 0 1 0
+14|O|Placed piece at (1,0) (bank: 0)
+15|O|XO.X.....
+16|O|Player 1 (X) Power Bank: 0
+17|O|Player 2 (O) Power Bank: 1
+18|O|Current Turn: Player 2
+19|I|ttt|move|1 1 1 1
+20|O|Placed piece at (1,1) (bank: 0)
+21|O|XO.XO....
+22|O|Player 1 (X) Power Bank: 1
+23|O|Player 2 (O) Power Bank: 0
+24|O|Current Turn: Player 1
+25|I|ttt|move|1 0 1 1
+26|O|Combat: (1,0) draws with (1,1) [1 vs 1] - Both reduced to power 0
+27|O|XO.X0O0....
+28|O|Player 1 (X) Power Bank: 1
+29|O|Player 2 (O) Power Bank: 1
+30|O|Current Turn: Player 2
+31|I|ttt|move|1 1 1 0
+32|O|Invalid move
+33|I|ttt|move|1 1 0 2
+34|O|Invalid move
+35|I|ttt|move|1 1 1 1
+36|O|Power up: (1,1) now has power 1 (bank: 0)
+37|O|XO.X0O....
+38|O|Player 1 (X) Power Bank: 2
+39|O|Player 2 (O) Power Bank: 0
+40|O|Current Turn: Player 1
+41|I|ttt|show|
+42|O|show command processed
+43|O|XO.X0O....
+44|O|Player 1 (X) Power Bank: 2
+45|O|Player 2 (O) Power Bank: 0
+46|O|Current Turn: Player 1

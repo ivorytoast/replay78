@@ -1,0 +1,18 @@
+1|I|ttt|new|
+2|O|new game command processed
+3|O|.........
+4|O|Player 1 (X) Power Bank: 1
+5|O|Player 2 (O) Power Bank: 1
+6|O|Current Turn: Player 1
+7|I|ttt|move|0 0 0 0
+8|O|Placed piece at (0,0) (bank: 0)
+9|O|X........
+10|O|Player 1 (X) Power Bank: 0
+11|O|Player 2 (O) Power Bank: 1
+12|O|Current Turn: Player 2
+13|I|ttt|move|2 2 2 2
+14|O|Placed piece at (2,2) (bank: 0)
+15|O|X.......O
+16|O|Player 1 (X) Power Bank: 1
+17|O|Player 2 (O) Power Bank: 0
+18|O|Current Turn: Player 1

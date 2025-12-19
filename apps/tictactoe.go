@@ -134,6 +134,11 @@ func (t *TicTacToeApp) makeMove(fromRow, fromCol, toRow, toCol int) string {
 			return ""
 		}
 
+		// Validate adjacency for moves/attacks (different-cell operations only)
+		if !t.isAdjacent(fromRow, fromCol, toRow, toCol) {
+			return ""
+		}
+
 		if toCell.Player == 0 {
 			// Moving to empty cell
 			state.SetCell(toRow, toCol, currentPlayer)
@@ -141,8 +146,11 @@ func (t *TicTacToeApp) makeMove(fromRow, fromCol, toRow, toCol int) string {
 			state.ClearCell(fromRow, fromCol)
 			result = fmt.Sprintf("Move: (%d,%d) -> (%d,%d)", fromRow, fromCol, toRow, toCol)
 		} else if toCell.Player == currentPlayer {
-			// Moving to own cell (not allowed except for power-up which is handled above)
-			return ""
+			// Combining two adjacent pieces of the same player
+			combinedPower := fromCell.Power + toCell.Power
+			state.SetCellPower(toRow, toCol, combinedPower)
+			state.ClearCell(fromRow, fromCol)
+			result = fmt.Sprintf("Combine: (%d,%d) + (%d,%d) -> power %d", fromRow, fromCol, toRow, toCol, combinedPower)
 		} else {
 			// Combat with opponent
 			attackPower := fromCell.Power
@@ -221,6 +229,19 @@ func (t *TicTacToeApp) makeMove(fromRow, fromCol, toRow, toCol int) string {
 	}
 
 	return result
+}
+
+func (t *TicTacToeApp) isAdjacent(fromRow, fromCol, toRow, toCol int) bool {
+	rowDiff := abs(fromRow - toRow)
+	colDiff := abs(fromCol - toCol)
+	return rowDiff+colDiff == 1
+}
+
+func abs(x int) int {
+	if x < 0 {
+		return -x
+	}
+	return x
 }
 
 func (t *TicTacToeApp) checkWinner() bool {

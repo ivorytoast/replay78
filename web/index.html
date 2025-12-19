@@ -177,6 +177,13 @@
             background: #f9f9f9;
         }
 
+        .cell.valid-target {
+            border-color: #27ae60;
+            border-width: 4px;
+            background: #e8f8f5;
+            box-shadow: 0 0 15px rgba(39, 174, 96, 0.4);
+        }
+
         .cell-player {
             font-size: 2.5em;
         }
@@ -310,9 +317,6 @@
     <div class="connection-status" id="connectionStatus">Connecting...</div>
 
     <div class="container">
-        <h1>⚔️ Tic-Tac-Toe Combat</h1>
-        <p class="subtitle">Click a piece, then click where to move/attack</p>
-
         <div class="game-info">
             <div>
                 <span class="current-player" id="currentPlayer">Current: <span class="player-x">X</span></span>
@@ -345,18 +349,6 @@
         </div>
 
         <div class="status" id="status">Click a cell to place your first piece</div>
-
-        <div class="legend">
-            <h3>How to Play</h3>
-            <ul>
-                <li><strong>Goal:</strong> Control all 9 spaces to win (3-in-a-row doesn't end the game!)</li>
-                <li><strong>Power Bank:</strong> Each turn, gain +1 power. Use power to boost your pieces.</li>
-                <li><strong>Power-Up:</strong> Click your own piece to boost its power (costs 1 from power bank)</li>
-                <li><strong>Lines:</strong> Form a line (row/col/diagonal) to gain +1 power bank per line</li>
-                <li><strong>Break Lines:</strong> Breaking opponent's line reduces their power bank by 1</li>
-                <li><strong>Combat:</strong> Higher power wins, equal power = draw (both at power 0)</li>
-            </ul>
-        </div>
     </div>
 
     <script src="game.js"></script>

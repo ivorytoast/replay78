@@ -6,6 +6,27 @@ let gameState = {
 };
 let selectedCell = null;
 
+// Helper function to check if two cells are adjacent (orthogonal only)
+function isAdjacent(fromRow, fromCol, toRow, toCol) {
+    const rowDiff = Math.abs(fromRow - toRow);
+    const colDiff = Math.abs(fromCol - toCol);
+    return rowDiff + colDiff === 1;
+}
+
+// Get all adjacent cells for a given position
+function getAdjacentCells(row, col) {
+    const adjacent = [];
+    // Up
+    if (row > 0) adjacent.push({row: row - 1, col: col});
+    // Down
+    if (row < 2) adjacent.push({row: row + 1, col: col});
+    // Left
+    if (col > 0) adjacent.push({row: row, col: col - 1});
+    // Right
+    if (col < 2) adjacent.push({row: row, col: col + 1});
+    return adjacent;
+}
+
 // Connect to WebSocket
 function connect() {
     ws = new WebSocket('ws://localhost:8080/ws');
@@ -80,6 +101,22 @@ function renderBoard() {
                 cell.classList.add('selected');
             }
 
+            // Highlight valid move targets when a piece is selected
+            if (selectedCell) {
+                const selectedPlayer = gameState.board[selectedCell.row][selectedCell.col].player;
+                const selectedPower = gameState.board[selectedCell.row][selectedCell.col].power;
+
+                // Only highlight for different-cell operations (moves/attacks)
+                if (selectedCell.row !== i || selectedCell.col !== j) {
+                    if (selectedPlayer === gameState.currentPlayer && selectedPower > 0) {
+                        // Check if this cell is adjacent
+                        if (isAdjacent(selectedCell.row, selectedCell.col, i, j)) {
+                            cell.classList.add('valid-target');
+                        }
+                    }
+                }
+            }
+
             cell.onclick = () => handleCellClick(i, j);
             boardEl.appendChild(cell);
         }
@@ -115,6 +152,22 @@ function handleCellClick(row, col) {
         const fromCol = selectedCell.col;
         const toRow = row;
         const toCol = col;
+
+        // Client-side adjacency check for immediate feedback (different-cell operations only)
+        if (fromRow !== toRow || fromCol !== toCol) {
+            const selectedPlayer = gameState.board[fromRow][fromCol].player;
+            const selectedPower = gameState.board[fromRow][fromCol].power;
+
+            // Only enforce adjacency for pieces with power (moves/attacks)
+            if (selectedPlayer === gameState.currentPlayer && selectedPower > 0) {
+                if (!isAdjacent(fromRow, fromCol, toRow, toCol)) {
+                    setStatus('Invalid move: Can only move to adjacent cells (up/down/left/right)');
+                    selectedCell = null;
+                    renderBoard();
+                    return;
+                }
+            }
+        }
 
         sendMove(fromRow, fromCol, toRow, toCol);
         selectedCell = null;

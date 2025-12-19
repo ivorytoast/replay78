@@ -14,10 +14,8 @@ import (
 
 /*
 What's Next:
-1. Only allow a cell to move to its neighboring cells. You can't attack bottom left corner
-with top right corner
-2. Allow the player to "use" as many power points they have in their bank for each turn
-3. Create a full regression test
+1. Allow the player to "use" as many power points they have in their bank for each turn
+2. Create a full regression test
 */
 func main() {
 	regression := flag.Bool("regression", false, "Run regression tests")

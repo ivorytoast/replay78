@@ -1,0 +1,54 @@
+# Adjacency Restriction Test
+# Tests that pieces can only move/attack orthogonally adjacent cells (up/down/left/right)
+# Diagonal and long-range moves should fail
+
+# Start new game
+ttt|new|
+
+# Test 1: Place pieces for testing
+ttt|move|0 0 0 0
+ttt|move|2 2 2 2
+
+# Test 2: Valid adjacent move - Player 1 moves right (0,0) -> (0,1)
+ttt|move|0 0 0 1
+ttt|show|
+
+# Test 3: Invalid diagonal move - Player 2 tries (2,2) -> (1,1) diagonal - should fail
+ttt|move|2 2 1 1
+ttt|show|
+
+# Test 4: Valid adjacent move - Player 2 moves up (2,2) -> (1,2)
+ttt|move|2 2 1 2
+
+# Test 5: Valid adjacent move - Player 1 moves down (0,1) -> (1,1)
+ttt|move|0 1 1 1
+
+# Test 6: Power up Player 2's piece at (1,2) - same cell operations should still work
+ttt|move|1 2 1 2
+
+# Test 7: Valid adjacent combat - Player 1 attacks (1,2) from (1,1)
+ttt|move|1 1 1 2
+
+# Test 8: Place new piece for Player 2 at (0,0)
+ttt|move|0 0 0 0
+
+# Test 9: Invalid long-range move - Player 1 tries to move from (1,2) to (1,0) - 2 cells away, should fail
+ttt|move|1 2 1 0
+
+# Test 10: Valid adjacent move - Player 2 moves from (0,0) to (1,0)
+ttt|move|0 0 1 0
+
+# Test 11: Valid adjacent move - Player 1 moves from (1,2) to (1,1)
+ttt|move|1 2 1 1
+
+# Test 12: Place piece at corner for Player 2
+ttt|move|2 0 2 0
+
+# Test 13: Valid adjacent move down - Player 1 from (1,1) to (2,1)
+ttt|move|1 1 2 1
+
+# Test 14: Invalid diagonal move - Player 2 tries (2,0) -> (1,1) diagonal - should fail
+ttt|move|2 0 1 1
+
+# Final board state
+ttt|show|
