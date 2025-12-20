@@ -2,9 +2,11 @@ package engine
 
 import (
 	"fmt"
-	"os"
 	"github.com/ivorytoast/replay78/states"
+	"log"
+	"os"
 	"strings"
+	"time"
 )
 
 type Application interface {
@@ -12,11 +14,43 @@ type Application interface {
 	Topics() []string
 }
 
+type InputGenerator interface {
+	Start(engine *Engine)
+}
+
+type IntervalGenerator struct {
+	InputFunc func() string
+	Interval  time.Duration
+}
+
+type ConnectionGenerator struct {
+	StartFunc func(engine *Engine)
+}
+
+func (g *IntervalGenerator) Start(e *Engine) {
+	go func() {
+		for {
+			input := g.InputFunc()
+			e.In(input)
+			time.Sleep(g.Interval)
+		}
+	}()
+	log.Printf("Started interval generator (interval: %v)", g.Interval)
+}
+
+func (g *ConnectionGenerator) Start(e *Engine) {
+	go func() {
+		log.Printf("Started connection generator")
+		g.StartFunc(e)
+	}()
+}
+
 type Engine struct {
 	file         *os.File
 	seq          int
 	queue        chan string
 	applications map[string]Application
+	generators   []InputGenerator
 
 	TicTacToeState *states.TicTacToeState
 }
@@ -69,14 +103,20 @@ func NewEngineWithLogFile(logFileName string) *Engine {
 		file:           f,
 		queue:          make(chan string, 100),
 		applications:   make(map[string]Application),
+		generators:     make([]InputGenerator, 0),
+		seq:            0,
 		TicTacToeState: states.NewTicTacToeState(),
 	}
 }
 
-func (e *Engine) Register(app Application) {
+func (e *Engine) RegisterApplication(app Application) {
 	for _, topic := range app.Topics() {
 		e.applications[topic] = app
 	}
+}
+
+func (e *Engine) RegisterGenerator(gen InputGenerator) {
+	e.generators = append(e.generators, gen)
 }
 
 func (e *Engine) TTT() *states.TicTacToeState {
@@ -93,6 +133,9 @@ func (e *Engine) Run() {
 }
 
 func (e *Engine) run() {
+	for _, gen := range e.generators {
+		gen.Start(e)
+	}
 	for line := range e.queue {
 		parts, isValid := parseMsg(line)
 		if !isValid {

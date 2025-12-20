@@ -4,10 +4,10 @@ import (
 	"bufio"
 	"flag"
 	"fmt"
-	"os"
-	"path/filepath"
 	"github.com/ivorytoast/replay78/apps"
 	"github.com/ivorytoast/replay78/engine"
+	"os"
+	"path/filepath"
 	"strings"
 	"time"
 )
@@ -25,7 +25,7 @@ func main() {
 	l := engine.NewEngine()
 
 	app := apps.NewTicTacToeApp(l)
-	l.Register(app)
+	l.RegisterApplication(app)
 
 	l.Run()
 
