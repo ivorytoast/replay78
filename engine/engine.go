@@ -119,6 +119,19 @@ func (e *Engine) RegisterGenerator(gen InputGenerator) {
 	e.generators = append(e.generators, gen)
 }
 
+func NewCustomInputGenerator(inputFunc func() string, interval time.Duration) *IntervalGenerator {
+	return &IntervalGenerator{
+		InputFunc: inputFunc,
+		Interval:  interval,
+	}
+}
+
+func NewConnectionInputGenerator(startFunc func(engine *Engine)) *ConnectionGenerator {
+	return &ConnectionGenerator{
+		StartFunc: startFunc,
+	}
+}
+
 func (e *Engine) TTT() *states.TicTacToeState {
 	return e.TicTacToeState
 }
