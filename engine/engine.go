@@ -5,6 +5,7 @@ import (
 	"github.com/ivorytoast/replay78/states"
 	"log"
 	"os"
+	"strconv"
 	"strings"
 	"time"
 )
@@ -99,11 +100,22 @@ func NewEngineWithLogFile(logFileName string) *Engine {
 		}
 	}
 	f, _ := os.Create(logFileName)
+
+	g := NewCustomInputGenerator(
+		func() string {
+			return "tick|tock|" + strconv.FormatInt(time.Now().UTC().UnixNano(), 10)
+		},
+		1*time.Second,
+	)
+
+	generators := make([]InputGenerator, 0)
+	generators = append(generators, g)
+
 	return &Engine{
 		file:           f,
 		queue:          make(chan string, 100),
 		applications:   make(map[string]Application),
-		generators:     make([]InputGenerator, 0),
+		generators:     generators,
 		seq:            0,
 		TicTacToeState: states.NewTicTacToeState(),
 	}
