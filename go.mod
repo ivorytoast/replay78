@@ -1,4 +1,4 @@
-module replay78
+module github.com/ivorytoast/replay78
 
 go 1.25.2
 
