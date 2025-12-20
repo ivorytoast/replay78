@@ -2,9 +2,9 @@ package apps
 
 import (
 	"fmt"
-	"replay78/assert"
-	"replay78/engine"
-	"replay78/states"
+	"github.com/ivorytoast/replay78/assert"
+	"github.com/ivorytoast/replay78/engine"
+	"github.com/ivorytoast/replay78/states"
 )
 
 type TicTacToeApp struct {

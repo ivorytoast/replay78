@@ -6,8 +6,8 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
-	"replay78/apps"
-	"replay78/engine"
+	"github.com/ivorytoast/replay78/apps"
+	"github.com/ivorytoast/replay78/engine"
 	"strings"
 	"time"
 )

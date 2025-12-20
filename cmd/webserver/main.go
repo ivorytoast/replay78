@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"log"
 	"net/http"
-	"replay78/apps"
-	"replay78/engine"
+	"github.com/ivorytoast/replay78/apps"
+	"github.com/ivorytoast/replay78/engine"
 	"sync"
 	"time"
 

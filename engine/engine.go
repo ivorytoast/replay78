@@ -3,7 +3,7 @@ package engine
 import (
 	"fmt"
 	"os"
-	"replay78/states"
+	"github.com/ivorytoast/replay78/states"
 	"strings"
 )
 
