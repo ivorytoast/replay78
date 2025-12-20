@@ -71,7 +71,7 @@ func discoverFuzzTestBaselines() []string {
 			l := engine.NewEngineWithLogFile(baselineLog)
 
 			app := apps.NewTicTacToeApp(l)
-			l.Register(app)
+			l.RegisterApplication(app)
 
 			l.Run()
 
@@ -159,7 +159,7 @@ func runRegressionTests(logFiles []string) {
 		l := engine.NewEngineWithLogFile(replayLogName)
 
 		app := apps.NewTicTacToeApp(l)
-		l.Register(app)
+		l.RegisterApplication(app)
 
 		l.Run()
 
