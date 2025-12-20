@@ -36,7 +36,7 @@ func NewGameServer() *GameServer {
 	app := apps.NewTicTacToeApp(e)
 	e.Register(app)
 
-	go e.Run()
+	e.Run()
 
 	return &GameServer{
 		engine:  e,

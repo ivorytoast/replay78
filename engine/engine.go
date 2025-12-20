@@ -89,6 +89,10 @@ func (e *Engine) nextSeq() int {
 }
 
 func (e *Engine) Run() {
+	go e.run()
+}
+
+func (e *Engine) run() {
 	for line := range e.queue {
 		parts, isValid := parseMsg(line)
 		if !isValid {

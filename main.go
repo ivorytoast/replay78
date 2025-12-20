@@ -27,7 +27,7 @@ func main() {
 	app := apps.NewTicTacToeApp(l)
 	l.Register(app)
 
-	go l.Run()
+	l.Run()
 
 	args := flag.Args()
 	if len(args) > 0 {
@@ -73,7 +73,7 @@ func discoverFuzzTestBaselines() []string {
 			app := apps.NewTicTacToeApp(l)
 			l.Register(app)
 
-			go l.Run()
+			l.Run()
 
 			// Read and replay test file
 			file, err := os.Open(testFile)
@@ -161,7 +161,7 @@ func runRegressionTests(logFiles []string) {
 		app := apps.NewTicTacToeApp(l)
 		l.Register(app)
 
-		go l.Run()
+		l.Run()
 
 		// Replay inputs
 		for _, input := range inputs {
