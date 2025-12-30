@@ -3,10 +3,10 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	"log"
-	"net/http"
 	"github.com/ivorytoast/replay78/apps"
 	"github.com/ivorytoast/replay78/engine"
+	"log"
+	"net/http"
 	"sync"
 	"time"
 
@@ -20,10 +20,10 @@ var upgrader = websocket.Upgrader{
 }
 
 type GameServer struct {
-	engine *engine.Engine
-	app    *apps.TicTacToeApp
+	engine  *engine.Engine
+	app     *apps.TicTacToeApp
 	clients map[*websocket.Conn]bool
-	mu     sync.Mutex
+	mu      sync.Mutex
 }
 
 type Message struct {
@@ -34,7 +34,7 @@ type Message struct {
 func NewGameServer() *GameServer {
 	e := engine.NewEngine()
 	app := apps.NewTicTacToeApp(e)
-	e.Register(app)
+	e.RegisterApplication(app)
 
 	e.Run()
 
